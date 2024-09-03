@@ -86,6 +86,31 @@ public class HashingPractice {
         //TC O(n), auxilary Space: O(n)
         return ans;
     }
+    // Count More than n/k Occurences.link:https://www.geeksforgeeks.org/batch/dsa-to-dev-batch-1-2-390-july/track/DSASP-Searching/problem/count-element-occurences
+    public int countOccurence(int[] arr, int n, int k) 
+    {
+        Map<Integer,Integer>numMap= new HashMap<>();
+        
+        for(int num: arr)
+        {
+            if(numMap.containsKey(num)){
+                int val=numMap.get(num);
+                numMap.put(num, val+1);
+            }
+            else{
+                numMap.put(num, 1);
+            }
+        }
+        int count=0;
+        for(int key: numMap.keySet())
+        {
+            if(numMap.get(key)>(n/k))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
     public static void main(String[] args) {
         
         String str="abccbdefffe";
@@ -97,6 +122,9 @@ public class HashingPractice {
        int []arr2={1,5,3,6,8};
 
        System.out.println("Intersection of arrays: "+Arrays.toString(hp.findIntersection(arr1, arr2)));
+
+       int []arr3={3,1,2,2,1,2,3};
+       System.out.println("No of elements count more than n/k: "+hp.countOccurence(arr3, 7, 3));
         
     }
 }
