@@ -166,6 +166,33 @@ def countOccurenceII(arr,n,k):
             count+=1
     return count
 
+#Floor square root of a number. ex: sqrt(4)=2, sqrt(7)=2, sqrt(9)=3
+def sqrtFloor(n):
+    #We can use binary search for this. The sqrt of n will lie between 1 to n. We will check for mid of mid*mid==n the ans is mid else if its greater than n we will have search for nos lower tha mid else for nos greater tha mid
+
+    if n==0 or n==1:
+        return n
+
+    start=1
+    end=n
+    mid=start+(end-start)//2
+    ans=-1
+
+    while start<=end:
+        
+        if mid*mid==n:
+            return mid
+        elif mid*mid>n:
+            end=mid-1
+        else:
+            start=mid+1
+            # mid*mid<n then mid is a probable answer as we are looking for the floor value of the sqrt
+            ans=mid
+        mid=start+(end-start)//2
+    # TC O(log n) and auxilary space is O(1)
+    return ans
+
+
 if __name__=='__main__':
     arr=[10,20,30,40,50,60]
     key=40
@@ -184,3 +211,6 @@ if __name__=='__main__':
 
     arr4=[2,3,3,2]
     print('Total nos count greater than n/k:',countOccurenceII(arr4,4,3))
+
+    n=1
+    print('Sqy=uare root of',n,'is:',sqrtFloor(n))

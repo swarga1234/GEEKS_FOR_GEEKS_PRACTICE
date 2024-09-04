@@ -193,6 +193,54 @@ public class ArrayPractice6 {
         return res;
 
     }
+    /*
+        You are given an array arr[] of N integers. The task is to find the smallest positive number missing from the array.
+        Input:
+        N = 5
+        arr[] = {0,-10,1,3,-20}
+        Output: 2
+        Explanation: Smallest positive missing 
+        number is 2.
+
+        link: https://www.geeksforgeeks.org/batch/dsa-to-dev-batch-1-2-390-july/track/DSASP-Searching/problem/smallest-positive-missing-number-1587115621
+
+    */
+    public int missingNumber(int arr[], int size)
+    {
+        //Lets find the maximum number in the array
+        int max=0;
+        for(int i=0; i<size; i++)
+        {
+            max=Math.max(max, arr[i]);
+        }
+        //As we are only looking for only positive nos we should not consider elements <0
+        int []freq= new int[max+2];
+        // We need to count frequencies of each no from 1 to max. If all the nos form 1 to max are present in the array then the smallest positive missing no would be max+1. Thus our freq array should contain all the indices from 1 to max+1 thus the size should be max+2.
+
+        Arrays.fill(freq, 0);
+        for(int i=0; i<size; i++)
+        {
+            if(arr[i]>0)
+            {
+                freq[arr[i]]++;
+            }
+            
+
+        } 
+
+        // The initial value of the smallest missing positive number can only be 0
+        int ans=1;
+
+        for(int i=1; i<max+2; i++)
+        {
+            if(freq[i]==0)
+            {
+                ans=i;
+                break;
+            }
+        }
+        return ans;
+    }
     public static void main(String[] args) {
         
         ArrayPractice6 arp6= new ArrayPractice6();
@@ -220,6 +268,9 @@ public class ArrayPractice6 {
         int maxx=15;
         System.out.println();
         System.out.println("The maximum occuring element in the given ranges: "+ArrayPractice6.maxOccured(left.length, left, right, maxx));
+
+        int []arr6= {0,-10,1,3,-20};
+        System.out.println("The smallest positive missing number is: "+arp6.missingNumber(arr6, arr6.length));
 
 
     }
