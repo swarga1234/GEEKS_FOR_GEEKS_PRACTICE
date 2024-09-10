@@ -320,6 +320,68 @@ public class ArrayPractice5 {
         }
         return false;
     }
+    /*
+        Indexes of Subarray Sum
+        Difficulty: MediumAccuracy: 16.5%Submissions: 1.7MPoints: 4
+        Given an unsorted array arr of size n that contains only non negative integers, find a sub-array (continuous elements) that has sum equal to s. You mainly need to return the left and right indexes(1-based indexing) of that subarray.
+
+        In case of multiple subarrays, return the subarray indexes which come first on moving from left to right. If no such subarray exists return an array consisting of element -1.
+
+        Input: arr[] = [1,2,3,7,5], n = 5, s = 12
+        Output: 2 4
+        Explanation: The sum of elements from 2nd to 4th position is 12.
+        link: https://www.geeksforgeeks.org/batch/dsa-to-dev-batch-1-2-390-july/track/DSASP-Searching/problem/subarray-with-given-sum-1587115621
+    */
+    public ArrayList<Integer> subarraySum(int[] arr, int n, int s){
+
+        ArrayList<Integer>ans= new ArrayList<>();
+        int currSum=0, l=0;
+        // We will use the same logic as the previous question as containsSum. But the twist is if the sum provided as input is itself 0. So we have to handle that.
+        int zeroIndex=-1; //This will be used for storing the first index of the element 0 in arr. 
+        boolean hasZero=false;
+
+        for(int i=0; i<n; i++)
+        {
+            if(arr[i]==0)
+            {
+                hasZero=true;
+                zeroIndex=i;
+                break;
+            }
+        }
+        //If the given sum is 0 and the array does not contain 0 then surely there doesn't exist a subarray whose sum is 0.
+        if(s==0 && !hasZero)
+        {
+            ans.add(-1);
+            return ans;
+        }
+        //if sum is 0 and the array contains an element 0. Then we can return the index of 0
+        if(s==0 && hasZero)
+        {
+            ans.add(zeroIndex+1);
+            ans.add(zeroIndex+1);
+            return ans;
+        }
+        //For all other cases we will find the subarray
+        for(int i=0; i<n; i++)
+        {
+            currSum+=arr[i];
+            while(currSum>s)
+            {
+                currSum-=arr[l];
+                l++;
+            }
+            if(currSum==s)
+            {
+                ans.add(l+1); // 1 based indexing
+                ans.add(i+1);
+                //Return only the first subarray
+                return ans;
+            }
+        }
+        ans.add(-1);
+        return ans;
+    }
     public static void main(String[] args) {
 
         ArrayPractice5 arp5 = new ArrayPractice5();
