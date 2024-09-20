@@ -241,6 +241,55 @@ public class ArrayPractice6 {
         }
         return ans;
     }
+    /*
+        Minimize the Heights II
+        Difficulty: MediumAccuracy: 15.06%Submissions: 582K+Points: 4
+        Given an array arr[] denoting heights of N towers and a positive integer K.
+
+        For each tower, you must perform exactly one of the following operations exactly once.
+
+        Increase the height of the tower by K
+        Decrease the height of the tower by K
+        Find out the minimum possible difference between the height of the shortest and tallest towers after you have modified each tower.
+
+        You can find a slight modification of the problem here.
+        Note: It is compulsory to increase or decrease the height by K for each tower. After the operation, the resultant array should not contain any negative integers.
+
+        Examples :
+
+        Input: k = 2, arr[] = {1, 5, 8, 10}
+        Output: 5
+        Explanation: The array can be modified as {1+k, 5-k, 8-k, 10-k} = {3, 3, 6, 8}.The difference between the largest and the smallest is 8-3 = 5.
+        
+        link: https://www.geeksforgeeks.org/problems/minimize-the-heights3351/1
+
+    */
+    public int getMinDiff(int[] arr, int k) {
+
+        // First step is to sort the array. As we need to get the height diff between the max height and the min height of the buildings.
+        Arrays.sort(arr);
+        int n=arr.length;
+        int ans=arr[n-1]-arr[0];
+
+        // If we need to minimize the height diff between the highest building and the lowest building we will have to increase the smallest height by k and reduce the highest building by k.
+        int smallest=arr[0]+k;
+        int highest=arr[n-1]-k;
+
+        // Now as we have to mandatorily increase / decrease the height of a building by k, there this operations can alter the smallest height and largest height. Thus we will have always look for the updated smallest and highest building while iteration through the array. Now traditionall y our smallest building will be arr[0]+k and the highest building will be arr[n-1]-k. So for any i th index if arr[i+1]-k <  arr[0]+k then it is the smallest element. Similarly if arr[i]+k> arr[n-1]-k then highest building will be arr[i]+k. As the height of the buildings can't be negative so the arr[i+1]-k < 0 then we should not calculate the minimum height diff.
+
+        for(int i=0; i<n-1; i++)
+        {
+            int min=Math.min(smallest, arr[i+1]-k);
+            int max=Math.max(highest,arr[i]+k);
+
+            if(min<0)
+            {
+                continue;
+            }
+            ans=Math.min(ans, max-min);
+        }
+        return ans;
+    }
     public static void main(String[] args) {
         
         ArrayPractice6 arp6= new ArrayPractice6();
@@ -271,6 +320,9 @@ public class ArrayPractice6 {
 
         int []arr6= {0,-10,1,3,-20};
         System.out.println("The smallest positive missing number is: "+arp6.missingNumber(arr6, arr6.length));
+
+        int []arr7={3,9,12,16,20};
+        System.out.println("The minimum diff b/w lowest and highest building: "+arp6.getMinDiff(arr7, 3));
 
 
     }

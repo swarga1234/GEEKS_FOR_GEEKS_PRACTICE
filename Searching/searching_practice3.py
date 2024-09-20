@@ -165,6 +165,35 @@ def maxWater(height, n):
 # Kth Largest element in the array.
 # Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
 # Output: 4
+def findKthLargestElement(nums, k):
+    end=float('-inf')
+    start=float('inf')
+    n=len(nums)
+    # Our search space is between smallest to the largest number of the array. We will first find out the mid and count how many nos in the array are smaller or equal to that number in the array. Now if there are n nos in the array and we want to find the kth largest element then we will have n-k+1 nos less or equal to the kth largest nos. We will use this to get our results
+    for num in nums:
+        end=max(end,num)
+        start=min(start,num)
+    ans= -1
+    mid=start+(end-start)//2
+    while start<=end:
+        count=countLessOrEqual(nums,mid)
+        if count==n-k+1:
+            ans=mid
+            return ans
+        elif count<n-k+1:
+            start=mid+1
+        else:
+            end=mid-1
+        mid=start+(end-start)//2
+    return ans
+
+def countLessOrEqual(nums,mid):
+    count=0
+    for num in nums:
+        if num<=mid:
+            count+=1
+    return count
+    
 if __name__ == '__main__':
 
     arr = [2,3,4,5]
@@ -185,3 +214,7 @@ if __name__ == '__main__':
 
     heights = [2,1,3,4,6,5]
     print('The max water trapped between buidlings is:',maxWater(heights,len(heights)))
+
+    nums = [3,2,3,1,2,4,2,5,6] 
+    k = 4
+    print('The',k,'th largest num is:',findKthLargestElement(nums,k))
