@@ -167,7 +167,7 @@ def merge_without_extra_space_2(arr1, arr2, n, m):
             if gap == 1:
                 break
             gap = (gap//2)+(gap % 2)
-
+    # TC O((n+m)log(n+m))
 
 if __name__ == '__main__':
 
