@@ -1,5 +1,6 @@
 package Hashing;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,6 +112,112 @@ public class HashingPractice {
         }
         return count;
     }
+    // Linear Probing in Hashing: https://www.geeksforgeeks.org/batch/dsa-to-dev-batch-1-2-390-july/track/DSASP-Hashing/problem/linear-probing-in-hashing-1587115620
+    public static int[] linearProbing(int hash_size, int arr[], int sizeOfArray)
+    {
+        int []ans= new int[hash_size];
+        Arrays.fill(ans, -1);
+
+        int count=hash_size;
+
+        for(int i=0; i<sizeOfArray; i++)
+        {
+            int num=arr[i];
+
+            int key=num%hash_size;
+            if(ans[key]==-1){
+                ans[key]=num;
+                count--;
+            }
+            else{
+
+                if(ans[key]==num)
+                {
+                    continue;
+                }
+                if(count==0)
+                {
+                    break;
+                }
+                else{
+                    int val=num;
+                    // System.out.println("num "+num);
+                    boolean ifExists=false;
+                    while(ans[key]!=-1)
+                    {
+                        val++;
+                        key=val%hash_size;
+                        if(ans[key]==num)
+                        {
+                            ifExists=true;
+                            break;
+                        }
+                        // System.out.println(key+" "+ans[key]);
+                    }
+                    ans[key]=num;
+                    if(ifExists==false){
+                        count--;
+                    }
+                    
+                }
+            }
+        }
+        return ans;
+    }
+    public static int[] quadraticProbing(int hash_size, int arr[], int sizeOfArray)
+    {
+        int []ans= new int[hash_size];
+        Arrays.fill(ans, -1);
+
+        int count=hash_size;
+
+        for(int i=0; i<sizeOfArray; i++)
+        {
+            int num=arr[i];
+
+            int key=num%hash_size;
+            if(ans[key]==-1){
+                ans[key]=num;
+                count--;
+            }
+            else{
+
+                if(ans[key]==num)
+                {
+                    continue;
+                }
+                if(count==0)
+                {
+                    break;
+                }
+                else{
+                    int val=num;
+                    // System.out.println("num "+num);
+                    boolean ifExists=false;
+                    int j=1;
+                    while(ans[key]!=-1)
+                    {
+                        
+                        key=(val+j*j)%hash_size;
+                        if(ans[key]==num)
+                        {
+                            ifExists=true;
+                            break;
+                        }
+                        j++;
+                        // System.out.println(key+" "+ans[key]);
+                    }
+                    ans[key]=num;
+                    if(ifExists==false){
+                        count--;
+                    }
+                    
+                }
+            }
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         
         String str="abccbdefffe";
@@ -125,6 +232,18 @@ public class HashingPractice {
 
        int []arr3={3,1,2,2,1,2,3};
        System.out.println("No of elements count more than n/k: "+hp.countOccurence(arr3, 7, 3));
+
+       int []arr={11, 15, 1, 13, 14, 9, 9, 20};
+       int hash_size=7;
+       int sizeOfArray=arr.length;
+
+       System.out.println("The hashed array after linear probing: "+Arrays.toString(HashingPractice.linearProbing(hash_size, arr, sizeOfArray)));
+
+       int []arr4={21,10,32,43};
+       hash_size=11;
+       sizeOfArray=arr4.length;
+
+       System.out.println("The hashed array after double probing: "+Arrays.toString(HashingPractice.quadraticProbing(hash_size, arr4, sizeOfArray)));
         
     }
 }

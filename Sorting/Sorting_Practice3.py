@@ -222,3 +222,4 @@ if __name__=='__main__':
     departures=[1000,800,700]
     print('Max number of guests you can meet:',meet_max_guests(arrivals,departures))
     
+    
