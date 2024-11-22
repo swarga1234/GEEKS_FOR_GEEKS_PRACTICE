@@ -1,8 +1,10 @@
 package Hashing;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 
@@ -36,33 +38,18 @@ public class HashingPractice {
         return maxOccuringCharVal;
     }
     //Intersection of 2 arrays
-    public int[] findIntersection(int []arr1, int []arr2)
+    public ArrayList<Integer> findIntersection(int []arr1, int []arr2)
     {
-        Map<Integer, Boolean>numMap= new HashMap<>();
-        int m=arr1.length, n=arr2.length;
-        for(int i=0; i<m; i++)
-        {
-            numMap.put(arr1[i], false);
+        HashSet<Integer> set= new HashSet<>();
+        ArrayList<Integer> ans=new ArrayList<>();
+        for(int num: arr2){
+            set.add(num);
         }
-        for(int i=0; i<n; i++)
-        {
-            if(numMap.containsKey(arr2[i]))
+        for(int num: arr1){
+            if(set.contains(num))
             {
-                numMap.put(arr2[i],true);
+                ans.add(num);
             }
-        }
-        for(int i=0; i<m; i++)
-        {
-            if(numMap.containsKey(arr1[i]) && numMap.get(arr1[i]).equals(false))
-            {
-                numMap.remove(arr1[i]);
-            }
-        }
-        int []ans=new int[numMap.keySet().size()];
-        int i=0;
-        for(int num: numMap.keySet())
-        {
-            ans[i++]=num;
         }
         return ans;
     }
@@ -228,7 +215,7 @@ public class HashingPractice {
        int []arr1={2,4,3,1};
        int []arr2={1,5,3,6,8};
 
-       System.out.println("Intersection of arrays: "+Arrays.toString(hp.findIntersection(arr1, arr2)));
+       System.out.println("Intersection of arrays: "+(hp.findIntersection(arr1, arr2)));
 
        int []arr3={3,1,2,2,1,2,3};
        System.out.println("No of elements count more than n/k: "+hp.countOccurence(arr3, 7, 3));
