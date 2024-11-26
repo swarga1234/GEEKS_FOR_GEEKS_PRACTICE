@@ -97,6 +97,65 @@ public class BitPractice2 {
         }
         return count; 
     }
+    // Power Set using bitwise operator
+    public void printPowerSet(String str){
+        int n=str.length();
+        // for a set of size n, the length of the power set would be pow(2,n)
+        int powSize=1<<n;
+
+        // Now we will check for the set bit. if the bit is set we will print the corresponding letter.
+        for(int i=0; i<powSize; i++){
+            for(int j=0; j<n; j++){
+                // we are iterating through each index of powerset and checking if the jth bit of the index is set. If set print correspoding jth character in str
+                if((i&(1<<j))!=0){
+                    System.out.print(str.charAt(j)+" ");
+                }   
+            }
+            System.out.println();
+        }
+        // TC O(n * 2^n)
+    }
+    // Swap all the odd and even bits of a number
+    public int swapBits(int n) {
+
+        // So we need to use a mask to extract out all the even bits and do a right shift. Use another mask to extract out all the odd bits and left shift. 
+
+        int evenBitsMask=0xAAAAAAAA; //10101010101010101010101010101010 - A number having 1 at the even positions
+
+        int evenBits=n&evenBitsMask;
+        evenBits=evenBits>>1;
+
+        int oddBitsMask=0x55555555; //01010101010101010101010101010101 - A number having 1 at the odd positions
+        int oddBits=n&oddBitsMask;
+        oddBits=oddBits<<1;
+
+        int ans=evenBits|oddBits;
+
+        return ans;
+
+    }
+    // Given a number N. Find the length of the longest consecutive 1s in its binary representation.
+    public int maxConsecutiveOnes(int N) {
+
+        if(N==0){
+            return 0;
+        }
+        int curr=0;
+        int maxLen=0;
+        while(N!=0){
+            if((N&1)==0){
+                maxLen=Math.max(maxLen, curr);
+                curr=0;
+            }
+            else{
+                curr++;
+            }
+            N=N>>1;
+        }
+        // For the count taken in last iteration
+        maxLen=Math.max(maxLen, curr);
+        return maxLen;
+    }
     public static void main(String[] args) {
 
         BitPractice2 bp2= new BitPractice2();
@@ -110,6 +169,16 @@ public class BitPractice2 {
 
         int m=15, n=3;
         System.out.println("The rightmost different bit is : "+bp2.posOfRightMostDiffBit(m, n));
+
+        String str="abc";
+        System.out.println("Print power set of : "+str);
+        bp2.printPowerSet(str);
+
+        n=23;
+        System.out.println("Number after swapping even and odd bits: "+bp2.swapBits(n)); 
+
+        int N=222;
+        System.out.println("Max no of consecutive 1's in the binary rep of N is: "+bp2.maxConsecutiveOnes(N));
     }
     
 }

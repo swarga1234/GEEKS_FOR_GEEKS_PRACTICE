@@ -146,7 +146,111 @@ def improved_naive_pattern_search_algo(str,pat):
         else:
             i=i+j
     # Here we are effectively traversing the whole length of the string str only once, so TC O(n) 
+# Rabin Karp pattern searching
+def RBSearch(pat,txt,q):
+    d=256
+    # For calculating the rolling hash and weighted sum we need to calculate h which is d^m-1. It can be explained as: we have "1234567" and the window is 4. So the number in the first window is 1234, So if we are asked to say what is the number in the 2nd window it can be calculated in O(1) by (1234 - 1*10^3)*10 + 5. So this can be written as (number - firstNumOfPreviousWindow * h)*d + lastNumberOfCurrentWindow. Here h=10^3 and d=10. So h=d^sizeOfWindow-1
+    h=1 
+    m=len(pat)
+    n=len(txt)
+    
+    for i in range(1,m):
+        h=(h*d)%q
+    
+    # p is hash of the pattern and t is hash of the text in the window
+    p=0
+    t=0
+    
+    #calculate p and t for the first window
+    for i in range(m):
+        p=(p*d + ord(pat[i]))%q
+        t=(t*d + ord(txt[i]))%q
+    
+    for i in range(n-m+1):
+        # So if the hash values of the pattern and the txt in window matches then only there is a chance that we may find the pattern. If the values does not match there is no way that the pattern is present as the hash values of same characters would have been same.
+        
+        if p==t:
+            found=True
+            # Now as the hash values matches we will compare each character in the window with each character in pattern. 
+            for j in range(m):
+                if txt[i+j]!=pat[j]:
+                    found=False
+                    break
+            
+            if found==True:
+                print('Found at:',i,end=' ')
+        
+        # Now we need to calculate the hash for next window in O(1)
+        if i<n-m:
+            t=((t- ord(txt[i])*h)*d + ord(txt[i+m]))%q
+            
+            if t<0:
+                t=t+q            
+# KMP alogorithm: Construct LPS array. LPS: Length of longest proper prefix which is also a suffix
+def getLps(str, lps):
+    
+    # Lets write the pseudocode for this. 
+    '''
+        There are 2 cases to look in this.
+        if str[i] and str[len] match where len=lps[i-1]
+        then,
+            lps[i]=len+1, and len++
+        else when do not match
+            if len=0 then lps[i]=0
+            else
+                len=lps[len-1]
+                and then again match str[i] and str[len] and repeat this until it falls into any of the above 2 cases
+    '''
+    length=0
+    n=len(str)
+    # lps[0] is always =0. As for the first character in the string the length of the longest proper prefix is always 0
+    lps[0]=0
+    i=1
+    while i<n:
+        if str[i]==str[length]:
+            lps[i]=length+1
+            length=length+1
+            i+=1
+        else:
+            if length==0:
+                lps[i]=0
+                i+=1
+            else:
+                length=lps[length-1]
+    
+    return lps
+# Pattern search using KMP algo
+def KMPDSearch(str,pat):
+    m=len(pat)
+    n=len(str)
+    lps=[0]*m
+    lps=getLps(pat,lps)
 
+    # Now after we have got the LPS array we can use it for pattern matching. 
+    i=0
+    j=0
+    found=False
+    while i<n:
+        if pat[j]==str[i]:
+            i+=1
+            j+=1
+        # If the whole pattern matches then print the starting index of the pattern
+        if j==m:
+            found=True
+            print(i-m,end=' ')
+            j=lps[j-1]
+        # if does not matches the if j is 0, then the first character of the pattern has not matched with the current character of the string. We should move to the next character in the string then. else if the j is not 0 then we take the help of lps
+        elif i<n and pat[j]!=str[i]:
+            if j==0:
+                i+=1
+            else:
+                j=lps[j-1]
+    
+    # TC O(n), SC: O(M) because of lps array
+    
+    return found
+    
+    
 if __name__=='__main__':
     
     str='aaaaa'
@@ -172,3 +276,16 @@ if __name__=='__main__':
     
     print('')
     improved_naive_pattern_search_algo(str,pat)
+    
+    str="aabaacaadaabaaba"
+    pat="TEST"
+    q=101 #q has to be prime number
+    print(' ')
+    RBSearch(pat,str,q)
+    
+    str='abacabad'
+    lps=[0]*len(str)
+    print('The lps array for str is:',getLps(str,lps))
+    
+    pat="aba"
+    print('The pat in str can be found:',KMPDSearch(str,pat))
