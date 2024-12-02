@@ -249,7 +249,84 @@ def KMPDSearch(str,pat):
     # TC O(n), SC: O(M) because of lps array
     
     return found
+
+# Check if the string s2 is a rotated string of s1
+def checkRotated(s1,s2):
+    # It is similar to pattern searching. So Here we can search s2 in s1 in a circular way. The more simpler approach will be to concatenate s1 with s1. And then search for s2 in it.
     
+    if len(s1)!=len(s2):
+        # One string is rotation of another only if the length of both the strings are same
+        return False
+    
+    index=(s1+s1).find(s2)
+    if index>=0:
+        return True
+    
+    return False
+
+# String rotated in any direction by 2 places
+def isRotatedBy2Places(s1,s2): 
+    
+    if len(s1)!=len(s2):
+        return False
+    index=(s1+s1).find(s2)
+    if index>=0 and (index == 2 or index==len(s1)-2):
+        return True
+        
+    return False
+
+# Checking if the anagram of s2 is present in s1
+def isPresentAnagram(s1,s2):
+    n=len(s1)
+    m=len(s2)
+    
+    CT=[0]*256
+    CP=[0]*256
+    
+    # We will check in each window of size m. For the first window we calculate
+    for i in range(m):
+        CP[ord(s2[i])]+=1
+        CT[ord(s1[i])]+=1
+    
+    # Traverse the string for all other windows
+    for i in range(m,n):
+        if areSame(CP,CT):
+            return True
+        
+        CT[ord(s1[i-m])]-=1
+        CT[ord(s1[i])]+=1
+    
+    # TC O(m+(n-m)*256)=O(n*256), SC 0(256)
+
+    return False
+
+def areSame(CP,CT):
+    for i in range(256):
+        if CT[i]!=CP[i]:
+            return False
+    
+    return True
+
+'''
+    Given a string s, check if it is a "Panagram" or not. Return true if the string is a Panagram, else return false.
+
+    A "Panagram" is a sentence containing every letter in the English Alphabet either in lowercase or Uppercase.
+'''
+def checkPangram(s):
+    s=s.lower()
+    count=[0]*26
+    
+    for i in range(len(s)):
+        val=ord(s[i])
+        if val>=97 and val<=122:
+            count[val-97]+=1
+    for i in range(26):
+        if count[i]==0:
+            return False
+    
+    return True
+
+     
     
 if __name__=='__main__':
     
@@ -289,3 +366,17 @@ if __name__=='__main__':
     
     pat="aba"
     print('The pat in str can be found:',KMPDSearch(str,pat))
+    
+    s1="ABAB"
+    s2="ABBA"
+    
+    print('If s2 is rotation of s1:',checkRotated(s1,s2))
+    
+    print('Rotated by 2 places:',isRotatedBy2Places('daxjheq','eqdaxjh'))
+    
+    s1='geeksforgeeks'
+    s2='ksee'
+    print('If anagram',s2,'present in',s1,':',isPresentAnagram(s1,s2))
+    
+    s='Bawds jog, flick quartz, vex nymph'
+    print('Is string s panagram:',checkPangram(s))
