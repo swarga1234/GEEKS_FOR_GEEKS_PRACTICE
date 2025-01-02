@@ -99,6 +99,26 @@ public class DoublyLinkedList {
         temp.prev.next=null;
         return head;
     }
+    //Delete at a position in doubly linked list
+    public Node deleteNode(int pos){
+        if(pos==1){
+            //delete the head
+            this.head=this.head.next;
+            this.head.prev=null;
+            return this.head;
+        }
+        //Any different position
+        Node curr=this.head.next;
+        for(int i=2; i<pos; i++){
+            curr=curr.next;
+        }
+        curr.prev.next=curr.next;
+        if(curr.next!=null){
+            curr.next.prev=curr.prev;
+        }
+        curr.prev=curr.next=null;
+        return head;
+    }
     public static void main(String[] args) {
         
         DoublyLinkedList doublyLinkedList= new DoublyLinkedList();
@@ -119,6 +139,9 @@ public class DoublyLinkedList {
 
         // Deleting the last node
         doublyLinkedList.printList(doublyLinkedList.deleteLast());
+
+        //Delete node at any random pos
+        doublyLinkedList.printList(doublyLinkedList.deleteNode(2));
         
     }
     
